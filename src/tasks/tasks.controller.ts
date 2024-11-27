@@ -1,4 +1,4 @@
-import { Controller, Post, Put, Delete, Body, Param, UseGuards, Req } from '@nestjs/common';
+import { Controller, Post, Get ,Put, Delete, Body, Param, UseGuards, Req } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { TasksService } from './tasks.service';
 
@@ -28,5 +28,17 @@ export class TasksController {
   @Delete('delete/:id')
   async deleteTask(@Param('id') id: number) {
     return this.tasksService.deleteTask(id);
+  }
+  @UseGuards(JwtAuthGuard)
+  @Get('project/:projectId')
+  async getTasksByProject(@Param('projectId') projectId: number) {
+    return this.tasksService.getTasksByProject(projectId);
+  }
+
+  // Get a specific task by ID
+  @UseGuards(JwtAuthGuard)
+  @Get(':id')
+  async getTaskById(@Param('id') id: number) {
+    return this.tasksService.getTaskById(id);
   }
 }

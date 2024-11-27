@@ -44,4 +44,24 @@ export class TasksService {
     await this.taskRepository.remove(task);
     return { message: 'Task deleted successfully' };
   }
+    // Get all tasks for a specific project
+    async getTasksByProject(projectId: number) {
+      return this.taskRepository.find({
+        where: { project: { id: projectId } },
+      });
+    }
+  
+    // Get a specific task by ID
+    async getTaskById(id: number) {
+      const task = await this.taskRepository.findOne({
+        where: { id },
+        relations: ['project'], // Include the project info
+      });
+  
+      if (!task) {
+        throw new NotFoundException('Task not found');
+      }
+  
+      return task;
+    }
 }
